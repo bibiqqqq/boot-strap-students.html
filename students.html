@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>班级信息</title>
+  <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+
+<body>
+  <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+  <!-- 同学们的信息表
+  table
+  名字电话寝室 -->
+  <!-- row? bootstrap 布局
+  分为删格系统 一行等分为12份
+  基本的概念行和列
+  我要新的一行 .row
+  一行里分成1:2:3三列
+  .col-md-2
+  .col-md-4
+  .col-md-6 -->
+  <div class="container">
+    <div class="row" style="height:500px;">
+      <div class="col-md-4" style="height:100%;background-color:red;"></div>
+      <div class="col-md-8 " style="height:100%;">
+        <div class="row" style="height:250px;">
+          <div class="col-md-6 " style="height:100%;background-color:yellow;"></div>
+          <div class="col-md-6 " style="height:100%;background-color:green;"></div>
+
+        </div>
+      <div class="row" style="height:250px;">
+        <div class="col-md-12 " style="height:100%;background-color:pink;"></div>
+      </div>
+
+
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-md-push-3">
+        <!-- bootstrap v3 支持ie7+ 所以占有率高
+        用于PC网站快速开发
+        表单
+        填完学生数据，在table中增加 -->
+        <form method="post" action="student.php" name="studentForm"
+        class="form-horizontal">
+  <div class="form-group">
+    <label for="username" class="col-sm-2 control-label" >姓名</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="username" required placeholder="请输入姓名">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="telephone" class="col-sm-2 control-label" >手机号</label>
+    <div class="col-sm-10">
+      <input type="tel" class="form-control" id="telephone" required placeholder="请输入手机号">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="company" class="col-sm-2 control-label" >公司</label>
+    <div class="col-sm-10">
+      <input type="text" name="company" class="form-control" id="company" required placeholder="请输入公司">
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">添加</button>
+    </div>
+  </div>
+</form>
+      </div>
+    </div>
+    <div class="row">
+      <!-- 让表格居中
+    表格太松散，好像用不了那么多宽度 -->
+      <div class="col-md-8 col-md-push-2">
+        <table class="table">
+          <caption>Optional table caption.</caption>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>名字</th>
+              <th>电话</th>
+              <th>城市</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- </div> -->
+
+<script>
+  const students = [{
+      name: '蜗牛',
+      telephone: '13700000000',
+      company: '杭州丁香园'
+    },
+    {
+      name: '胡樾',
+      telephone: '13500000000',
+      company: '新浪'
+    },
+    {
+      name: '王正昊',
+      telephone: '15990000000',
+      company: '北京链家'
+    },
+  ]
+  // 原生js  大侠
+  // dom 编程
+  const tbody = document.querySelector('tbody');
+  // //不care index
+  // // 有序号
+  // let i = 0;
+  // // tr html 数组
+  // let studentHtml = [];
+  // for(student of students){
+  //   i++;
+  //   // 数组新增
+  //   // 每一项都是一个tr字符串
+  //   // 多行字符串模版让html表达更自如
+  //   studentHtml.push(`
+  //     <tr>
+  //       <th>${i}</th>
+  //       <td>${student.name}</td>
+  //       <td>${student.telephone}</td>
+  //       <td>${student.company}</td>
+  //     </tr>
+  //     `)
+  // }
+  // // 数字平铺为字符串，用join
+  // // 意义是连接，将数组字符串连接起来
+  // tbody.innerHTML = studentHtml.join('');
+  // jquery 菜鸟
+  // jquery 就是js 原生api 的再次封装，同时，解决了
+  // 各个浏览器的兼容性问题
+  // 函数式编程
+  // 遍历数组每项，并返回一个新的数组
+  const trArr = students.map((student,i)=>{
+
+    // 原来是student json
+    // 返回的新的数组项 tr字符串
+    return `
+    <tr>
+      <th>${i+1}</th>
+      <td>${student.name}</td>
+      <td>${student.telephone}</td>
+      <td>${student.company}</td>
+      <td align="Center" style="width:20%;">
+      <a href="javascript:;" onclick='{deleteCurrentRow(this);}'>删除</a>
+      </td>
+    `
+  })
+  function deleteCurrentRow(obj){
+      var tr=obj.parentNode.parentNode;
+      var tbody=tr.parentNode;
+      tbody.removeChild(tr);
+      //只剩行首时删除表格
+      if(tbody.rows.length==0) {
+          tbody.parentNode.removeChild(tbody);
+      }
+      numCheck();
+      
+      }
+      function numCheck() {
+        var num = $("tbody tr").length;
+        for(var i=0;i<=num;i++){
+          $("tbody tr th").eq(i).html(i+1);
+        }
+function validatemobile(telephone) 
+   { 
+       if(telephone.length==0) 
+       { 
+          alert('请输入手机号码！'); 
+          document.oForm.telephone.focus(); 
+          return false; 
+       }     
+       if(telephone.length!=11) 
+       { 
+           alert('请输入有效的手机号码！'); 
+           document.oForm.telephone.focus(); 
+           return false; 
+       } 
+        
+       var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+       if(!myreg.test(telephone)) 
+       { 
+           alert('请输入有效的手机号码！'); 
+           document.oForm.telephone.focus(); 
+           return false; 
+       } 
+       
+   } 
+
+ 
+        validatemobile(telephone);
+
+
+
+  }
+
+  console.log(trArr);
+  $('tbody').html(trArr.join(''));
+  const oForm = document.forms['studentForm'];
+  console.log(oForm);
+  // 阻止表单提交，因为会跳页面，要停在当下
+  // 手动用js 将新数据添加到当前页面上
+
+  oForm.addEventListener('submit',function (event) {
+    // 事件的默认行为 ，点a 跳转地址
+    // form submit...
+    event.preventDefault(); //不会提交了 action
+    // alert('提交了表单');
+    let username = oForm['username'].value;
+    let telephone =  oForm['telephone'].value;
+    let company =  oForm['company'].value;
+    if(username && telephone && company){
+      let newStudentTr = `
+      <tr>
+        <th>${students.length+1}</th>
+        <td>${username}</td>
+        <td>${telephone}</td>
+        <td>${company}</td>
+        <td align="Center" style="width:20%;">
+      <a href="javascript:;" onclick='{deleteCurrentRow(this);}'>删除</a>
+      </tr>
+      `;
+      tbody.innerHTML += newStudentTr;
+      oForm.reset();
+    //  选择了jquery 兼容性
+      $('body').animate({
+        scrollTop:0
+      },500)
+      numCheck();
+     
+  
+    }
+
+  })
+</script>
+</body>
+
+</html>
